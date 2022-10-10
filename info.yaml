@@ -2,7 +2,7 @@ title: "번역"
 version: "1.0.0.0"
 package_name: "trans"
 developer: "TEAM"
-description': "번역 관련 설정 및 API 제공"
+description: "번역 관련 설정 및 API 제공"
 home: "https://github.com/flaskfarm/trans"
 more: "https://raw.githubusercontent.com/flaskfarm/trans/main/README.md"
 
