@@ -28,15 +28,17 @@ setting = {
     'filepath' : __file__,
     'use_db': True,
     'use_default_setting': True,
-    'home_module': 'base',
+    'home_module': None,
     'menu': __menu,
     'setting_menu': None,
     'default_route': 'normal',
 }
 
 from plugin import *
+
 P = create_plugin_instance(setting)
 
 from .mod_base import ModuleBase
+
 P.set_module_list([ModuleBase])
 
