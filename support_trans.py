@@ -1,4 +1,6 @@
-import json, urllib.request
+import json
+import urllib.request
+
 
 class SupportTrans:
     @classmethod
@@ -82,19 +84,24 @@ class SupportTrans:
 
     @classmethod
     def trans_google_web2(cls, text, source='ja', target='ko'):
-        import requests
-        url = 'https://translate.google.com/translate_a/single'
-        headers = {'User-Agent': 'GoogleTranslate/6.27.0.08.415126308 (Linux; U; Android 7.1.2; PIXEL 2 XL)'}
-        params = {'q': text, 'sl': source, 'tl': target,
-                'hl': 'ko-KR', 'ie': 'UTF-8', 'oe': 'UTF-8', 'client': 'at',
-                'dt': ('t', 'ld', 'qca', 'rm', 'bd', 'md', 'ss', 'ex', 'sos')}
+        try:
+            import requests
+            url = 'https://translate.google.com/translate_a/single'
+            headers = {'User-Agent': 'GoogleTranslate/6.27.0.08.415126308 (Linux; U; Android 7.1.2; PIXEL 2 XL)'}
+            params = {'q': text, 'sl': source, 'tl': target,
+                    'hl': 'ko-KR', 'ie': 'UTF-8', 'oe': 'UTF-8', 'client': 'at',
+                    'dt': ('t', 'ld', 'qca', 'rm', 'bd', 'md', 'ss', 'ex', 'sos')}
+            
+            response = requests.get(url, params=params, headers=headers).json()
+            translated_text = ''
+            for sentence in response[0][:-1]:
+                translated_text += sentence[0].strip() + ' '
+            return translated_text
+        except Exception as e: 
+            return text
+
+
         
-        response = requests.get(url, params=params, headers=headers).json()
-        translated_text = ''
-        for sentence in response[0][:-1]:
-            translated_text += sentence[0].strip() + ' '
-        return translated_text
-    
     @classmethod
     def trans_papago_web(cls, text, source='ja', target='ko'):
         from papagopy import Papagopy
