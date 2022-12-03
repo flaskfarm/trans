@@ -1,36 +1,14 @@
-__menu = {
-    'uri': __package__,
-    'name': '번역',
-    'list': [
-        {
-            'uri': 'base',
-            'name': '설정',
-        },
-        {
-            'uri': 'manual',
-            'name': '매뉴얼',
-            'list': [
-                {
-                    'uri': 'README.md',
-                    'name': 'README'
-                }
-            ]
-        },
-        {
-            'uri': 'log',
-            'name': '로그',
-        },
-    ]
-}
-
-
 setting = {
     'filepath' : __file__,
     'use_db': True,
     'use_default_setting': True,
     'home_module': None,
-    'menu': __menu,
+    'menu': None,
     'setting_menu': None,
+    'setting_menu': {
+        'uri': f"trans/base/setting",
+        'name': '번역 설정',
+    },
     'default_route': 'normal',
 }
 
