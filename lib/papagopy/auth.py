@@ -1,11 +1,13 @@
-import uuid
-import hmac
 import base64
-import time
-import requests
+import hmac
 import re
+import time
+import uuid
+
+import requests
 
 from . import constants as CONST
+
 
 def getUUID():
   return uuid.uuid4()
