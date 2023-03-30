@@ -55,23 +55,32 @@ class SupportTrans:
         if papago_key == '' or papago_key is None:
             return text
         
-        for tmp in papago_key:
-            client_id, client_secret = tmp.split(',')
-            if client_id == '' or client_id is None or client_secret == '' or client_secret is None: 
-                return text
-            data = "source=%s&target=%s&text=%s" % (source, target, text)
-            url = "https://openapi.naver.com/v1/papago/n2mt"
-            requesturl = urllib.request.Request(url)
-            requesturl.add_header("X-Naver-Client-Id", client_id)
-            requesturl.add_header("X-Naver-Client-Secret", client_secret)
-            response = urllib.request.urlopen(requesturl, data = data.encode("utf-8"))
-            data = json.load(response)
-            rescode = response.getcode()
-            if rescode == 200:
-                return data['message']['result']['translatedText']
-            else:
-                continue
-        return text
+        try:
+            for tmp in papago_key:
+                try:
+                    client_id, client_secret = tmp.split(',')
+                    if client_id == '' or client_id is None or client_secret == '' or client_secret is None:
+                        return text
+                    data = "source=%s&target=%s&text=%s" % (source, target, text)
+                    url = "https://openapi.naver.com/v1/papago/n2mt"
+                    requesturl = urllib.request.Request(url)
+                    requesturl.add_header("X-Naver-Client-Id", client_id)
+                    requesturl.add_header("X-Naver-Client-Secret", client_secret)
+                    response = urllib.request.urlopen(requesturl, data = data.encode("utf-8"))
+                    data = json.load(response)
+                    rescode = response.getcode()
+                    if rescode == 200:
+                        return data['message']['result']['translatedText']
+                    else:
+                        continue
+                except Exception as e:
+                    if e.code == 429: continue
+                    else: break
+            return text
+        except Exception as e:
+            P.logger.error(f'{str(e)}')
+            return text
+
     
 
     @classmethod
