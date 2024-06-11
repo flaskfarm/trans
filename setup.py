@@ -8,6 +8,10 @@ setting = {
     'setting_menu': {
         'uri': f"trans/base/setting",
         'name': '번역 설정',
+        'list': [
+            {'uri': 'setting', 'name': '설정'},
+            {'uri': 'manual/README.md', 'name': 'README'},
+        ]
     },
     'default_route': 'normal',
 }

@@ -1,13 +1,7 @@
 title: "번역"
-version: "1.0.0"
+version: "1.1.0"
 package_name: "trans"
 developer: "FlaskFarm"
 description: "번역 관련 설정 및 API 제공"
 home: "https://github.com/flaskfarm/trans"
 more: "https://raw.githubusercontent.com/flaskfarm/trans/main/README.md"
-
-require_plugin: ""
-require_os' : ""
-need_decrypt_code: false
-need_filesize_check': false
-filesize: 0

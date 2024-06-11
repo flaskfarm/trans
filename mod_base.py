@@ -1,5 +1,6 @@
 from .setup import *
 from .support_trans import SupportTrans
+
 name = 'base'
 
 class ModuleBase(PluginModuleBase):
@@ -7,13 +8,12 @@ class ModuleBase(PluginModuleBase):
         f'{name}_db_version' : '1',
         f'{name}_trans_type' : 'google_web2',
         f'{name}_trans_google_apikey' : '',
-        f'{name}_trans_papago_key' : '',
+        f'{name}_trans_deepl_apikey' : '',
     }
 
     def __init__(self, P):
         super(ModuleBase, self).__init__(P, name=name)
-        #P.blueprint.template_folder = os.path.dirname(__file__)
-        
+
 
     def process_menu(self, page, req):
         arg = P.ModelSetting.to_dict()
@@ -23,6 +23,7 @@ class ModuleBase(PluginModuleBase):
             P.logger.error(f'Exception:{str(e)}')
             P.logger.error(traceback.format_exc())
             return render_template('sample.html', title=f"{__package__}/{name}/{page}")
+
 
     def process_command(self, command, arg1, arg2, arg3, req):
         if command == 'trans_test':

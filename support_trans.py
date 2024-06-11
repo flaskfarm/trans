@@ -1,5 +1,7 @@
 import json
+import os
 import urllib.request
+from random import randint
 
 
 class SupportTrans:
@@ -11,20 +13,14 @@ class SupportTrans:
         func = cls.get_func(api_type)
         return func(text, source=source, target=target)
 
-
     @classmethod
     def get_func(cls, api_type):
         if api_type == 'google_api':
             return cls.trans_google_api
-        elif api_type == 'papago_api':
-            return cls.trans_papago_api
-        elif api_type == 'google_web':
-            return cls.trans_google_web
         elif api_type == 'google_web2':
             return cls.trans_google_web2
-        elif api_type == 'papapgo_web':
-            return cls.trans_papago_web
-
+        elif api_type == 'deepl_api':
+            return cls.trans_deepl_api
 
     @classmethod
     def trans_google_api(cls, text, source='ja', target='ko', google_apikey=None):
@@ -48,41 +44,6 @@ class SupportTrans:
 
 
     @classmethod
-    def trans_papago_api(cls, text, source='ja', target='ko', papago_key=None):
-        if papago_key == None:
-            from .setup import P
-            papago_key = P.ModelSetting.get_list('base_trans_papago_key')
-        if papago_key == '' or papago_key is None:
-            return text
-        
-        for tmp in papago_key:
-            client_id, client_secret = tmp.split(',')
-            if client_id == '' or client_id is None or client_secret == '' or client_secret is None: 
-                return text
-            data = "source=%s&target=%s&text=%s" % (source, target, text)
-            url = "https://openapi.naver.com/v1/papago/n2mt"
-            requesturl = urllib.request.Request(url)
-            requesturl.add_header("X-Naver-Client-Id", client_id)
-            requesturl.add_header("X-Naver-Client-Secret", client_secret)
-            response = urllib.request.urlopen(requesturl, data = data.encode("utf-8"))
-            data = json.load(response)
-            rescode = response.getcode()
-            if rescode == 200:
-                return data['message']['result']['translatedText']
-            else:
-                continue
-        return text
-    
-
-    @classmethod
-    def trans_google_web(cls, text, source='ja', target='ko'):
-        from google_trans_new_embed import google_translator
-        translator = google_translator()  
-        translate_text = translator.translate(text, lang_src=source, lang_tgt=target)
-        return translate_text
-        
-
-    @classmethod
     def trans_google_web2(cls, text, source='ja', target='ko'):
         try:
             import requests
@@ -101,11 +62,24 @@ class SupportTrans:
             return text
 
 
-        
+
     @classmethod
-    def trans_papago_web(cls, text, source='ja', target='ko'):
-        from papagopy import Papagopy
-        translator = Papagopy()
-        translate_text = translator.translate(text, sourceCode=source, targetCode=target)
-        return translate_text
-        
+    def trans_deepl_api(cls, text, source='ja', target='ko'):
+        try:
+            import deepl
+        except:
+            os.system("pip install deepl")
+        try:
+            import deepl
+
+            from .setup import P
+            deepl_apikeys = P.ModelSetting.get_list('base_trans_deepl_apikey')
+            if len(deepl_apikeys) == 0:
+                return text
+            translator = deepl.Translator(deepl_apikeys[randint(0, len(deepl_apikeys)-1)])
+
+            result = translator.translate_text(text, target_lang=target)
+            return result.text
+
+        except Exception as e: 
+            return text
